@@ -7,10 +7,6 @@
     "build": "vite build",
     "dev": "vite"
   },
-  "engines": {
-    "node": ">= 22.21.1",
-    "npm": ">= 10.9.2"
-  },
   "dependencies": {
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
