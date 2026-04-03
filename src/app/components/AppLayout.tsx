@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { Outlet, Link, useLocation } from 'react-router';
-import { 
-  AppBar, 
-  Toolbar, 
-  Container, 
-  Box, 
-  Button, 
+import { useState } from "react";
+import { Outlet, Link, useLocation } from "react-router";
+import {
+  AppBar,
+  Toolbar,
+  Container,
+  Box,
+  Button,
   Typography,
   IconButton,
   Menu,
@@ -15,61 +15,55 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  List,
-  ListItem,
-  ListItemButton,
   ListItemText,
   ListItemIcon,
   Divider,
   Avatar,
-  Stack
-} from '@mui/material';
-import { 
-  Favorite, 
-  People, 
-  Description, 
-  VolunteerActivism, 
+  Stack,
+} from "@mui/material";
+import {
+  Favorite,
+  People,
+  Description,
+  VolunteerActivism,
   Circle,
   AccountCircle,
   SwapHoriz,
   Add,
-  CheckCircle
-} from '@mui/icons-material';
+  CheckCircle,
+} from "@mui/icons-material";
 
 export function AppLayout() {
   const location = useLocation();
   const [profileAnchor, setProfileAnchor] = useState<null | HTMLElement>(null);
   const [circleAnchor, setCircleAnchor] = useState<null | HTMLElement>(null);
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
-  const [circleDialogOpen, setCircleDialogOpen] = useState(false);
   const [newCircleDialogOpen, setNewCircleDialogOpen] = useState(false);
 
   // Mock user data
   const [userData, setUserData] = useState({
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    subscription: 'Pro Plan',
+    name: "John Doe",
+    email: "john.doe@example.com",
+    subscription: "Pro Plan",
   });
 
   // Mock circles data
   const [circles, setCircles] = useState([
-    { id: '1', name: "Sarah's Care Circle", role: 'Caregiver', active: true },
-    { id: '2', name: "Mom's Support Network", role: 'Family', active: false },
-    { id: '3', name: "Community Care", role: 'Friend', active: false },
+    { id: "1", name: "Sarah's Care Circle", role: "Caregiver", active: true },
+    { id: "2", name: "Mom's Support Network", role: "Family", active: false },
+    { id: "3", name: "Community Care", role: "Friend", active: false },
   ]);
 
-  const [newCircleName, setNewCircleName] = useState('');
-  const [newCircleRole, setNewCircleRole] = useState('');
+  const [newCircleName, setNewCircleName] = useState("");
+  const [newCircleRole, setNewCircleRole] = useState("");
 
   const navigation = [
-    { name: 'Dashboard', path: '/app', icon: Favorite },
-    { name: 'Circle', path: '/app/circle', icon: Circle },
-    { name: 'Updates', path: '/app/updates', icon: Description },
-    { name: 'Members', path: '/app/members', icon: People },
-    { name: 'Help', path: '/app/help', icon: VolunteerActivism },
+    { name: "Dashboard", path: "/app", icon: Favorite },
+    { name: "Circle", path: "/app/circle", icon: Circle },
+    { name: "Updates", path: "/app/updates", icon: Description },
+    { name: "Members", path: "/app/members", icon: People },
+    { name: "Help", path: "/app/help", icon: VolunteerActivism },
   ];
-
-  const activeCircle = circles.find(c => c.active);
 
   const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
     setProfileAnchor(event.currentTarget);
@@ -85,7 +79,7 @@ export function AppLayout() {
   };
 
   const handleSwitchCircle = (circleId: string) => {
-    setCircles(circles.map(c => ({ ...c, active: c.id === circleId })));
+    setCircles(circles.map((c) => ({ ...c, active: c.id === circleId })));
     handleCloseMenus();
   };
 
@@ -98,10 +92,10 @@ export function AppLayout() {
         active: false,
       };
       setCircles([...circles, newCircle]);
-      setNewCircleName('');
-      setNewCircleRole('');
+      setNewCircleName("");
+      setNewCircleRole("");
       setNewCircleDialogOpen(false);
-      setCircleDialogOpen(false);
+      //setCircleDialogOpen(false);
     }
   };
 
@@ -111,30 +105,44 @@ export function AppLayout() {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
-      <AppBar position="sticky" color="default" elevation={1} sx={{ bgcolor: 'white' }}>
+    <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
+      <AppBar
+        position="sticky"
+        color="default"
+        elevation={1}
+        sx={{ bgcolor: "white" }}
+      >
         <Toolbar>
-          <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8, flexGrow: 1 }}>
+          <Link
+            to="/"
+            style={{
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              flexGrow: 1,
+            }}
+          >
             <Box
               sx={{
                 width: 40,
                 height: 40,
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #3b82f6 0%, #a855f7 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
+                borderRadius: "50%",
+                background: "linear-gradient(135deg, #3b82f6 0%, #a855f7 100%)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              <Favorite sx={{ color: 'white' }} />
+              <Favorite sx={{ color: "white" }} />
             </Box>
-            <Typography 
-              variant="h6" 
-              sx={{ 
-                background: 'linear-gradient(90deg, #3b82f6 0%, #a855f7 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                fontWeight: 600
+            <Typography
+              variant="h6"
+              sx={{
+                background: "linear-gradient(90deg, #3b82f6 0%, #a855f7 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                fontWeight: 600,
               }}
             >
               Circle of Care
@@ -142,11 +150,12 @@ export function AppLayout() {
           </Link>
 
           {/* Main Navigation */}
-          <Box sx={{ display: 'flex', gap: 1, mr: 2 }}>
+          <Box sx={{ display: "flex", gap: 1, mr: 2 }}>
             {navigation.map((item) => {
-              const isActive = item.path === '/app' 
-                ? location.pathname === '/app'
-                : location.pathname.startsWith(item.path);
+              const isActive =
+                item.path === "/app"
+                  ? location.pathname === "/app"
+                  : location.pathname.startsWith(item.path);
               const Icon = item.icon;
               return (
                 <Button
@@ -155,15 +164,15 @@ export function AppLayout() {
                   to={item.path}
                   startIcon={<Icon />}
                   sx={{
-                    textTransform: 'none',
-                    color: isActive ? 'primary.main' : 'text.secondary',
-                    bgcolor: isActive ? 'primary.light' : 'transparent',
-                    '&:hover': {
-                      bgcolor: isActive ? 'primary.light' : 'grey.100'
-                    }
+                    textTransform: "none",
+                    color: isActive ? "primary.main" : "text.secondary",
+                    bgcolor: isActive ? "primary.light" : "transparent",
+                    "&:hover": {
+                      bgcolor: isActive ? "primary.light" : "grey.100",
+                    },
                   }}
                 >
-                  <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                  <Box sx={{ display: { xs: "none", sm: "block" } }}>
                     {item.name}
                   </Box>
                 </Button>
@@ -175,11 +184,11 @@ export function AppLayout() {
           <Button
             startIcon={<SwapHoriz />}
             onClick={handleCircleClick}
-            sx={{ textTransform: 'none', mr: 1 }}
+            sx={{ textTransform: "none", mr: 1 }}
             variant="outlined"
             size="small"
           >
-            <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+            <Box sx={{ display: { xs: "none", md: "block" } }}>
               Change Circle
             </Box>
           </Button>
@@ -195,12 +204,12 @@ export function AppLayout() {
             open={Boolean(profileAnchor)}
             onClose={handleCloseMenus}
             anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
+              vertical: "bottom",
+              horizontal: "right",
             }}
             transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
+              vertical: "top",
+              horizontal: "right",
             }}
           >
             <Box sx={{ px: 2, py: 1 }}>
@@ -212,7 +221,12 @@ export function AppLayout() {
               </Typography>
             </Box>
             <Divider />
-            <MenuItem onClick={() => { setProfileDialogOpen(true); handleCloseMenus(); }}>
+            <MenuItem
+              onClick={() => {
+                setProfileDialogOpen(true);
+                handleCloseMenus();
+              }}
+            >
               <ListItemIcon>
                 <AccountCircle fontSize="small" />
               </ListItemIcon>
@@ -226,12 +240,12 @@ export function AppLayout() {
             open={Boolean(circleAnchor)}
             onClose={handleCloseMenus}
             anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
+              vertical: "bottom",
+              horizontal: "right",
             }}
             transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
+              vertical: "top",
+              horizontal: "right",
             }}
             PaperProps={{ sx: { minWidth: 280 } }}
           >
@@ -242,22 +256,28 @@ export function AppLayout() {
             </Box>
             <Divider />
             {circles.map((circle) => (
-              <MenuItem 
+              <MenuItem
                 key={circle.id}
                 onClick={() => handleSwitchCircle(circle.id)}
                 selected={circle.active}
               >
                 <ListItemIcon>
-                  {circle.active ? <CheckCircle fontSize="small" color="primary" /> : <Circle fontSize="small" />}
+                  {circle.active ? (
+                    <CheckCircle fontSize="small" color="primary" />
+                  ) : (
+                    <Circle fontSize="small" />
+                  )}
                 </ListItemIcon>
-                <ListItemText 
-                  primary={circle.name}
-                  secondary={circle.role}
-                />
+                <ListItemText primary={circle.name} secondary={circle.role} />
               </MenuItem>
             ))}
             <Divider />
-            <MenuItem onClick={() => { setNewCircleDialogOpen(true); handleCloseMenus(); }}>
+            <MenuItem
+              onClick={() => {
+                setNewCircleDialogOpen(true);
+                handleCloseMenus();
+              }}
+            >
               <ListItemIcon>
                 <Add fontSize="small" />
               </ListItemIcon>
@@ -272,8 +292,8 @@ export function AppLayout() {
       </Container>
 
       {/* Profile Dialog */}
-      <Dialog 
-        open={profileDialogOpen} 
+      <Dialog
+        open={profileDialogOpen}
         onClose={() => setProfileDialogOpen(false)}
         maxWidth="sm"
         fullWidth
@@ -281,20 +301,24 @@ export function AppLayout() {
         <DialogTitle>Profile Settings</DialogTitle>
         <DialogContent>
           <Stack spacing={3} sx={{ mt: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <Avatar 
-                sx={{ 
-                  width: 80, 
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Avatar
+                sx={{
+                  width: 80,
                   height: 80,
-                  background: 'linear-gradient(135deg, #3b82f6 0%, #a855f7 100%)',
-                  fontSize: '2rem'
+                  background:
+                    "linear-gradient(135deg, #3b82f6 0%, #a855f7 100%)",
+                  fontSize: "2rem",
                 }}
               >
-                {userData.name.split(' ').map(n => n[0]).join('')}
+                {userData.name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
               </Avatar>
               <Box>
                 <Typography variant="h6">{userData.name}</Typography>
-                <Button size="small" sx={{ textTransform: 'none' }}>
+                <Button size="small" sx={{ textTransform: "none" }}>
                   Change Photo
                 </Button>
               </Box>
@@ -304,40 +328,45 @@ export function AppLayout() {
               fullWidth
               label="Full Name"
               value={userData.name}
-              onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+              onChange={(e) =>
+                setUserData({ ...userData, name: e.target.value })
+              }
             />
-            
+
             <TextField
               fullWidth
               label="Email"
               type="email"
               value={userData.email}
-              onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+              onChange={(e) =>
+                setUserData({ ...userData, email: e.target.value })
+              }
             />
 
             <Box>
               <Typography variant="subtitle2" gutterBottom>
                 Subscription
               </Typography>
-              <Box 
-                sx={{ 
-                  p: 2, 
-                  bgcolor: '#eff6ff', 
+              <Box
+                sx={{
+                  p: 2,
+                  bgcolor: "#eff6ff",
                   borderRadius: 1,
-                  border: '1px solid #3b82f6'
+                  border: "1px solid #3b82f6",
                 }}
               >
-                <Typography variant="body2" fontWeight="medium" color="primary.dark">
+                <Typography
+                  variant="body2"
+                  fontWeight="medium"
+                  color="primary.dark"
+                >
                   {userData.subscription}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
                   Billed monthly • Next payment: April 27, 2026
                 </Typography>
               </Box>
-              <Button 
-                size="small" 
-                sx={{ mt: 1, textTransform: 'none' }}
-              >
+              <Button size="small" sx={{ mt: 1, textTransform: "none" }}>
                 Manage Subscription
               </Button>
             </Box>
@@ -349,27 +378,27 @@ export function AppLayout() {
                 Account Actions
               </Typography>
               <Stack spacing={1}>
-                <Button 
-                  variant="outlined" 
-                  size="small" 
+                <Button
+                  variant="outlined"
+                  size="small"
                   fullWidth
-                  sx={{ textTransform: 'none', justifyContent: 'flex-start' }}
+                  sx={{ textTransform: "none", justifyContent: "flex-start" }}
                 >
                   Change Password
                 </Button>
-                <Button 
-                  variant="outlined" 
-                  size="small" 
+                <Button
+                  variant="outlined"
+                  size="small"
                   fullWidth
-                  sx={{ textTransform: 'none', justifyContent: 'flex-start' }}
+                  sx={{ textTransform: "none", justifyContent: "flex-start" }}
                 >
                   Privacy Settings
                 </Button>
-                <Button 
-                  variant="outlined" 
-                  size="small" 
+                <Button
+                  variant="outlined"
+                  size="small"
                   fullWidth
-                  sx={{ textTransform: 'none', justifyContent: 'flex-start' }}
+                  sx={{ textTransform: "none", justifyContent: "flex-start" }}
                 >
                   Notification Preferences
                 </Button>
@@ -386,15 +415,20 @@ export function AppLayout() {
       </Dialog>
 
       {/* Create New Circle Dialog */}
-      <Dialog 
-        open={newCircleDialogOpen} 
+      <Dialog
+        open={newCircleDialogOpen}
         onClose={() => setNewCircleDialogOpen(false)}
         maxWidth="sm"
         fullWidth
       >
         <DialogTitle>Create New Circle</DialogTitle>
         <DialogContent>
-          <Typography variant="body2" color="text.secondary" paragraph sx={{ mt: 1 }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            paragraph
+            sx={{ mt: 1 }}
+          >
             Start a new circle of care for someone who needs support.
           </Typography>
           <Stack spacing={3}>
@@ -406,7 +440,7 @@ export function AppLayout() {
               onChange={(e) => setNewCircleName(e.target.value)}
               helperText="Give your circle a meaningful name"
             />
-            
+
             <TextField
               fullWidth
               select
@@ -424,25 +458,26 @@ export function AppLayout() {
               <option value="Friend">Friend</option>
             </TextField>
 
-            <Box 
-              sx={{ 
-                p: 2, 
-                bgcolor: '#dbeafe', 
+            <Box
+              sx={{
+                p: 2,
+                bgcolor: "#dbeafe",
                 borderRadius: 1,
-                border: '1px solid #3b82f6'
+                border: "1px solid #3b82f6",
               }}
             >
               <Typography variant="body2" color="primary.dark">
-                <strong>Next steps:</strong> After creating your circle, you'll be able to add the person at 
-                the center, invite other members, and start sharing updates.
+                <strong>Next steps:</strong> After creating your circle, you'll
+                be able to add the person at the center, invite other members,
+                and start sharing updates.
               </Typography>
             </Box>
           </Stack>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setNewCircleDialogOpen(false)}>Cancel</Button>
-          <Button 
-            onClick={handleCreateCircle} 
+          <Button
+            onClick={handleCreateCircle}
             variant="contained"
             disabled={!newCircleName || !newCircleRole}
           >

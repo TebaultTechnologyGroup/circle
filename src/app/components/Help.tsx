@@ -1,37 +1,70 @@
-import { useState } from 'react';
-import { mockHelpRequests, mockMembers } from '../data/mockData';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Textarea } from './ui/textarea';
-import { Badge } from './ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Label } from './ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { HandHeart, Plus, UtensilsCrossed, Car, ShoppingBag, Coffee, DollarSign, CheckCircle2, Clock } from 'lucide-react';
-import { toast } from 'sonner';
-import { Avatar, AvatarFallback } from './ui/avatar';
+import { useState } from "react";
+import { mockHelpRequests, mockMembers } from "../data/mockData";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { Badge } from "./ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Label } from "./ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import {
+  HandHeart,
+  Plus,
+  UtensilsCrossed,
+  Car,
+  ShoppingBag,
+  Coffee,
+  DollarSign,
+  CheckCircle2,
+  Clock,
+} from "lucide-react";
+import { toast } from "sonner";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 
 export function Help() {
-  const [newTitle, setNewTitle] = useState('');
-  const [newDescription, setNewDescription] = useState('');
-  const [newCategory, setNewCategory] = useState<'meal' | 'ride' | 'errand' | 'visit' | 'other'>('meal');
-  const [fundingGoal, setFundingGoal] = useState('');
-  const [fundingPurpose, setFundingPurpose] = useState('');
+  const [newTitle, setNewTitle] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const [newCategory, setNewCategory] = useState<
+    "meal" | "ride" | "errand" | "visit" | "other"
+  >("meal");
+  const [fundingGoal, setFundingGoal] = useState("");
+  const [fundingPurpose, setFundingPurpose] = useState("");
 
-  const openRequests = mockHelpRequests.filter((h) => h.status === 'open');
-  const claimedRequests = mockHelpRequests.filter((h) => h.status === 'claimed');
+  const openRequests = mockHelpRequests.filter((h) => h.status === "open");
+  const claimedRequests = mockHelpRequests.filter(
+    (h) => h.status === "claimed",
+  );
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'meal':
+      case "meal":
         return <UtensilsCrossed className="w-4 h-4" />;
-      case 'ride':
+      case "ride":
         return <Car className="w-4 h-4" />;
-      case 'errand':
+      case "errand":
         return <ShoppingBag className="w-4 h-4" />;
-      case 'visit':
+      case "visit":
         return <Coffee className="w-4 h-4" />;
       default:
         return <HandHeart className="w-4 h-4" />;
@@ -40,42 +73,43 @@ export function Help() {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'meal':
-        return 'bg-orange-100 text-orange-700 border-orange-300';
-      case 'ride':
-        return 'bg-blue-100 text-blue-700 border-blue-300';
-      case 'errand':
-        return 'bg-green-100 text-green-700 border-green-300';
-      case 'visit':
-        return 'bg-purple-100 text-purple-700 border-purple-300';
+      case "meal":
+        return "bg-orange-100 text-orange-700 border-orange-300";
+      case "ride":
+        return "bg-blue-100 text-blue-700 border-blue-300";
+      case "errand":
+        return "bg-green-100 text-green-700 border-green-300";
+      case "visit":
+        return "bg-purple-100 text-purple-700 border-purple-300";
       default:
-        return 'bg-gray-100 text-gray-700 border-gray-300';
+        return "bg-gray-100 text-gray-700 border-gray-300";
     }
   };
 
   const handleCreateRequest = () => {
     if (!newTitle || !newDescription) {
-      toast.error('Please fill in all fields');
+      toast.error("Please fill in all fields");
       return;
     }
-    toast.success('Help request created!');
-    setNewTitle('');
-    setNewDescription('');
-    setNewCategory('meal');
+    toast.success("Help request created!");
+    setNewTitle("");
+    setNewDescription("");
+    setNewCategory("meal");
   };
 
   const handleVolunteer = (requestId: string, title: string) => {
+    console.log(`Volunteered to help with request ${requestId}`);
     toast.success(`You've volunteered to help with: ${title}`);
   };
 
   const handleStartFundraiser = () => {
     if (!fundingGoal || !fundingPurpose) {
-      toast.error('Please fill in all fields');
+      toast.error("Please fill in all fields");
       return;
     }
-    toast.success('Fundraising campaign created!');
-    setFundingGoal('');
-    setFundingPurpose('');
+    toast.success("Fundraising campaign created!");
+    setFundingGoal("");
+    setFundingPurpose("");
   };
 
   return (
@@ -83,11 +117,16 @@ export function Help() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-semibold">Help & Support</h1>
-          <p className="text-gray-600">Ways to provide practical support to the family</p>
+          <p className="text-gray-600">
+            Ways to provide practical support to the family
+          </p>
         </div>
         <Dialog>
           <DialogTrigger asChild>
-            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600">
+            <Button
+              size="lg"
+              className="bg-gradient-to-r from-blue-600 to-purple-600"
+            >
               <Plus className="mr-2 h-5 w-5" />
               Request Help
             </Button>
@@ -128,7 +167,10 @@ export function Help() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="category">Category</Label>
-                  <Select value={newCategory} onValueChange={(v) => setNewCategory(v as any)}>
+                  <Select
+                    value={newCategory}
+                    onValueChange={(v) => setNewCategory(v as any)}
+                  >
                     <SelectTrigger id="category">
                       <SelectValue />
                     </SelectTrigger>
@@ -173,8 +215,10 @@ export function Help() {
                 </div>
                 <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                   <p className="text-sm text-blue-900">
-                    <strong>Note:</strong> This will create a fundraising campaign that circle members and 
-                    their networks can contribute to. Funds will be managed through a secure payment processor.
+                    <strong>Note:</strong> This will create a fundraising
+                    campaign that circle members and their networks can
+                    contribute to. Funds will be managed through a secure
+                    payment processor.
                   </p>
                 </div>
                 <Button onClick={handleStartFundraiser} className="w-full">
@@ -230,22 +274,31 @@ export function Help() {
           <Card>
             <CardContent className="p-12 text-center">
               <HandHeart className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-              <p className="text-gray-600">No open help requests at the moment</p>
+              <p className="text-gray-600">
+                No open help requests at the moment
+              </p>
             </CardContent>
           </Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {openRequests.map((request) => (
-              <Card key={request.id} className="hover:shadow-lg transition-shadow">
+              <Card
+                key={request.id}
+                className="hover:shadow-lg transition-shadow"
+              >
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <CardTitle className="text-lg">{request.title}</CardTitle>
                       <CardDescription className="mt-1">
-                        {request.date ? `Needed by ${request.date.toLocaleDateString()}` : 'Flexible timing'}
+                        {request.date
+                          ? `Needed by ${request.date.toLocaleDateString()}`
+                          : "Flexible timing"}
                       </CardDescription>
                     </div>
-                    <Badge className={`capitalize ${getCategoryColor(request.category)}`}>
+                    <Badge
+                      className={`capitalize ${getCategoryColor(request.category)}`}
+                    >
                       {getCategoryIcon(request.category)}
                       <span className="ml-1">{request.category}</span>
                     </Badge>
@@ -258,8 +311,7 @@ export function Help() {
                     className="w-full"
                     variant="default"
                   >
-                    <HandHeart className="mr-2 h-4 w-4" />
-                    I Can Help
+                    <HandHeart className="mr-2 h-4 w-4" />I Can Help
                   </Button>
                 </CardContent>
               </Card>
@@ -274,35 +326,52 @@ export function Help() {
           <h2 className="text-xl font-semibold">In Progress</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {claimedRequests.map((request) => {
-              const volunteer = mockMembers.find((m) => m.id === request.volunteerId);
+              const volunteer = mockMembers.find(
+                (m) => m.id === request.volunteerId,
+              );
               return (
                 <Card key={request.id} className="border-green-200 bg-green-50">
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <CardTitle className="text-lg">{request.title}</CardTitle>
+                        <CardTitle className="text-lg">
+                          {request.title}
+                        </CardTitle>
                         <CardDescription className="mt-1">
-                          {request.date ? request.date.toLocaleDateString() : 'Flexible timing'}
+                          {request.date
+                            ? request.date.toLocaleDateString()
+                            : "Flexible timing"}
                         </CardDescription>
                       </div>
-                      <Badge className={`capitalize ${getCategoryColor(request.category)}`}>
+                      <Badge
+                        className={`capitalize ${getCategoryColor(request.category)}`}
+                      >
                         {getCategoryIcon(request.category)}
                         <span className="ml-1">{request.category}</span>
                       </Badge>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <p className="text-sm text-gray-700">{request.description}</p>
+                    <p className="text-sm text-gray-700">
+                      {request.description}
+                    </p>
                     {volunteer && (
                       <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-green-200">
                         <Avatar className="w-10 h-10">
                           <AvatarFallback className="bg-green-600 text-white">
-                            {volunteer.name.split(' ').map((n) => n[0]).join('')}
+                            {volunteer.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1">
-                          <p className="text-sm font-medium">{volunteer.name}</p>
-                          <p className="text-xs text-gray-600">Volunteered to help</p>
+                          <p className="text-sm font-medium">
+                            {volunteer.name}
+                          </p>
+                          <p className="text-xs text-gray-600">
+                            Volunteered to help
+                          </p>
                         </div>
                         <CheckCircle2 className="w-5 h-5 text-green-600" />
                       </div>
@@ -322,7 +391,9 @@ export function Help() {
             <DollarSign className="w-5 h-5" />
             Financial Support
           </CardTitle>
-          <CardDescription>Help with medical expenses and other costs</CardDescription>
+          <CardDescription>
+            Help with medical expenses and other costs
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -331,7 +402,10 @@ export function Help() {
               <span className="font-semibold">$3,250 of $10,000 goal</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-              <div className="bg-gradient-to-r from-green-500 to-emerald-600 h-full rounded-full" style={{ width: '32.5%' }}></div>
+              <div
+                className="bg-gradient-to-r from-green-500 to-emerald-600 h-full rounded-full"
+                style={{ width: "32.5%" }}
+              ></div>
             </div>
           </div>
           <div className="flex gap-2">
@@ -339,12 +413,11 @@ export function Help() {
               <DollarSign className="mr-2 h-4 w-4" />
               Contribute
             </Button>
-            <Button variant="outline">
-              View Details
-            </Button>
+            <Button variant="outline">View Details</Button>
           </div>
           <p className="text-xs text-gray-600">
-            Funds will be used for medical expenses, home care, and daily living support.
+            Funds will be used for medical expenses, home care, and daily living
+            support.
           </p>
         </CardContent>
       </Card>
