@@ -2,7 +2,7 @@ import { RouterProvider } from "react-router";
 import { AuthProvider, useAuth } from "./context/AppContext";
 import { router } from "./routes";
 import { Toaster } from "./components/ui/sonner";
-import { LoginPage } from "./components/Loginpage";
+import { LoginPage } from "./components/LoginPage";
 import { Loader2, Heart } from "lucide-react";
 
 // ── Inner app: renders login or the full router based on auth state ───────────
