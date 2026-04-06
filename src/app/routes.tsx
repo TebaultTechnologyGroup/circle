@@ -1,11 +1,11 @@
 import { createBrowserRouter } from "react-router";
-import { LandingPage } from "./components/LandingPage";
-import { AppLayout } from "./components/AppLayout";
-import { Dashboard } from "./components/Dashboard";
-import { CircleView } from "./components/CircleView";
-import { Updates } from "./components/Updates";
-import { Members } from "./components/Members";
-import { Help } from "./components/Help";
+import { LandingPage } from "./pages/LandingPage";
+import { AppLayout } from "./pages/AppLayout";
+import { Dashboard } from "./pages/Dashboard";
+import { CircleView } from "./pages/CircleView";
+import { Updates } from "./pages/Updates";
+import { Members } from "./pages/Members";
+import { Help } from "./pages/Help";
 
 export const router = createBrowserRouter([
   {

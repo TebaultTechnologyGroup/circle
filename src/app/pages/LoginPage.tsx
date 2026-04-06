@@ -8,9 +8,9 @@ import {
   resendSignUpCode,
 } from "aws-amplify/auth";
 import { Heart, Loader2, ArrowLeft } from "lucide-react";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
+import { Button } from "../pages/ui/button";
+import { Input } from "../pages/ui/input";
+import { Label } from "../pages/ui/label";
 import { toast } from "sonner";
 import { getErrorMessage } from "../utils/Errors";
 
