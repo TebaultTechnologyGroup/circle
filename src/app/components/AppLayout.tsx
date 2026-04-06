@@ -1,490 +1,333 @@
 import { useState } from "react";
-import { Outlet, Link, useLocation } from "react-router";
+import { Outlet, Link, useLocation, useNavigate } from "react-router";
 import {
-  AppBar,
-  Toolbar,
-  Container,
-  Box,
-  Button,
-  Typography,
-  IconButton,
-  Menu,
-  MenuItem,
+  Heart,
+  Users,
+  FileText,
+  HandHeart,
+  CircleDot,
+  ChevronDown,
+  Plus,
+  CheckCircle2,
+  LogOut,
+  User,
+  ArrowLeftRight,
+} from "lucide-react";
+import { Button } from "./ui/button";
+import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Badge } from "./ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import {
   Dialog,
-  DialogTitle,
   DialogContent,
-  DialogActions,
-  TextField,
-  ListItemText,
-  ListItemIcon,
-  Divider,
-  Avatar,
-  Stack,
-} from "@mui/material";
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
+} from "./ui/dialog";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 import {
-  Favorite,
-  People,
-  Description,
-  VolunteerActivism,
-  Circle,
-  AccountCircle,
-  SwapHoriz,
-  Add,
-  CheckCircle,
-} from "@mui/icons-material";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { ProfileDialog } from "./ProfileDialog";
+import { useAuth } from "../context/AppContext";
+import { cn } from "./ui/utils";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface CircleEntry {
+  id: string;
+  name: string;
+  role: string;
+  active: boolean;
+}
+
+// ─── Nav items ────────────────────────────────────────────────────────────────
+
+const navigation = [
+  { name: "Dashboard", path: "/app", icon: Heart },
+  { name: "Circle", path: "/app/circle", icon: CircleDot },
+  { name: "Updates", path: "/app/updates", icon: FileText },
+  { name: "Members", path: "/app/members", icon: Users },
+  { name: "Help", path: "/app/help", icon: HandHeart },
+];
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export function AppLayout() {
   const location = useLocation();
-  const [profileAnchor, setProfileAnchor] = useState<null | HTMLElement>(null);
-  const [circleAnchor, setCircleAnchor] = useState<null | HTMLElement>(null);
-  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
-  const [newCircleDialogOpen, setNewCircleDialogOpen] = useState(false);
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
 
-  // Mock user data
-  const [userData, setUserData] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
-    subscription: "Pro Plan",
-  });
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [newCircleOpen, setNewCircleOpen] = useState(false);
 
-  // Mock circles data
-  const [circles, setCircles] = useState([
-    { id: "1", name: "Sarah's Care Circle", role: "Caregiver", active: true },
+  // Placeholder circle list — will be replaced when Circle feature is wired up
+  const [circles, setCircles] = useState<CircleEntry[]>([
+    {
+      id: "1",
+      name: "Sarah's Circle of Care",
+      role: "Caregiver",
+      active: true,
+    },
     { id: "2", name: "Mom's Support Network", role: "Family", active: false },
-    { id: "3", name: "Community Care", role: "Friend", active: false },
   ]);
 
   const [newCircleName, setNewCircleName] = useState("");
   const [newCircleRole, setNewCircleRole] = useState("");
 
-  const navigation = [
-    { name: "Dashboard", path: "/app", icon: Favorite },
-    { name: "Circle", path: "/app/circle", icon: Circle },
-    { name: "Updates", path: "/app/updates", icon: Description },
-    { name: "Members", path: "/app/members", icon: People },
-    { name: "Help", path: "/app/help", icon: VolunteerActivism },
-  ];
+  const activeCircle = circles.find((c) => c.active);
 
-  const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
-    setProfileAnchor(event.currentTarget);
-  };
+  const initials = user
+    ? user.firstName && user.lastName
+      ? `${user.firstName[0]}${user.lastName[0]}`
+      : user.email[0].toUpperCase()
+    : "?";
 
-  const handleCircleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setCircleAnchor(event.currentTarget);
-  };
+  const displayName =
+    user?.firstName && user?.lastName
+      ? `${user.firstName} ${user.lastName}`
+      : user?.email ?? "";
 
-  const handleCloseMenus = () => {
-    setProfileAnchor(null);
-    setCircleAnchor(null);
-  };
+  // ── Handlers ────────────────────────────────────────────────────────────────
 
-  const handleSwitchCircle = (circleId: string) => {
-    setCircles(circles.map((c) => ({ ...c, active: c.id === circleId })));
-    handleCloseMenus();
-  };
+  function handleSwitchCircle(id: string) {
+    setCircles((prev) => prev.map((c) => ({ ...c, active: c.id === id })));
+  }
 
-  const handleCreateCircle = () => {
-    if (newCircleName && newCircleRole) {
-      const newCircle = {
-        id: Date.now().toString(),
-        name: newCircleName,
-        role: newCircleRole,
-        active: false,
-      };
-      setCircles([...circles, newCircle]);
-      setNewCircleName("");
-      setNewCircleRole("");
-      setNewCircleDialogOpen(false);
-      //setCircleDialogOpen(false);
-    }
-  };
+  function handleCreateCircle() {
+    if (!newCircleName || !newCircleRole) return;
+    const next: CircleEntry = {
+      id: Date.now().toString(),
+      name: newCircleName,
+      role: newCircleRole,
+      active: false,
+    };
+    setCircles((prev) => [...prev, next]);
+    setNewCircleName("");
+    setNewCircleRole("");
+    setNewCircleOpen(false);
+  }
 
-  const handleSaveProfile = () => {
-    setProfileDialogOpen(false);
-    // In a real app, this would save to backend
-  };
+  async function handleSignOut() {
+    await signOut();
+    navigate("/");
+  }
+
+  // ── Render ───────────────────────────────────────────────────────────────────
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
-      <AppBar
-        position="sticky"
-        color="default"
-        elevation={1}
-        sx={{ bgcolor: "white" }}
-      >
-        <Toolbar>
-          <Link
-            to="/"
-            style={{
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              flexGrow: 1,
-            }}
-          >
-            <Box
-              sx={{
-                width: 40,
-                height: 40,
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, #3b82f6 0%, #a855f7 100%)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Favorite sx={{ color: "white" }} />
-            </Box>
-            <Typography
-              variant="h6"
-              sx={{
-                background: "linear-gradient(90deg, #3b82f6 0%, #a855f7 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                fontWeight: 600,
-              }}
-            >
-              Circle of Care
-            </Typography>
-          </Link>
+    <div className="min-h-screen bg-gray-50">
+      {/* ── Top Nav ── */}
+      <header className="sticky top-0 z-40 bg-white border-b border-gray-100 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center h-14 gap-4">
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-2 shrink-0">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                <Heart className="w-4 h-4 text-white" />
+              </div>
+              <span className="font-semibold text-sm bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hidden sm:block">
+                Circle of Care
+              </span>
+            </Link>
 
-          {/* Main Navigation */}
-          <Box sx={{ display: "flex", gap: 1, mr: 2 }}>
-            {navigation.map((item) => {
-              const isActive =
-                item.path === "/app"
-                  ? location.pathname === "/app"
-                  : location.pathname.startsWith(item.path);
-              const Icon = item.icon;
-              return (
-                <Button
-                  key={item.path}
-                  component={Link}
-                  to={item.path}
-                  startIcon={<Icon />}
-                  sx={{
-                    textTransform: "none",
-                    color: isActive ? "primary.main" : "text.secondary",
-                    bgcolor: isActive ? "primary.light" : "transparent",
-                    "&:hover": {
-                      bgcolor: isActive ? "primary.light" : "grey.100",
-                    },
-                  }}
-                >
-                  <Box sx={{ display: { xs: "none", sm: "block" } }}>
-                    {item.name}
-                  </Box>
-                </Button>
-              );
-            })}
-          </Box>
+            {/* Main Navigation */}
+            <nav className="flex items-center gap-1 flex-1">
+              {navigation.map((item) => {
+                const isActive =
+                  item.path === "/app"
+                    ? location.pathname === "/app"
+                    : location.pathname.startsWith(item.path);
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={cn(
+                      "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
+                      isActive
+                        ? "bg-blue-50 text-blue-700"
+                        : "text-gray-500 hover:text-gray-700 hover:bg-gray-50",
+                    )}
+                  >
+                    <Icon className="w-4 h-4 shrink-0" />
+                    <span className="hidden md:block">{item.name}</span>
+                  </Link>
+                );
+              })}
+            </nav>
 
-          {/* Change Circle Button */}
-          <Button
-            startIcon={<SwapHoriz />}
-            onClick={handleCircleClick}
-            sx={{ textTransform: "none", mr: 1 }}
-            variant="outlined"
-            size="small"
-          >
-            <Box sx={{ display: { xs: "none", md: "block" } }}>
-              Change Circle
-            </Box>
-          </Button>
+            {/* Right side controls */}
+            <div className="flex items-center gap-2 shrink-0">
+              {/* Switch Circle dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 hidden sm:flex"
+                  >
+                    <ArrowLeftRight className="w-3.5 h-3.5" />
+                    <span className="max-w-[120px] truncate text-xs">
+                      {activeCircle?.name ?? "Select Circle"}
+                    </span>
+                    <ChevronDown className="w-3 h-3 opacity-50" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-64">
+                  <DropdownMenuLabel className="text-xs text-gray-500 font-normal">
+                    Your Circles
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {circles.map((circle) => (
+                    <DropdownMenuItem
+                      key={circle.id}
+                      onClick={() => handleSwitchCircle(circle.id)}
+                      className="flex items-center gap-2"
+                    >
+                      <CheckCircle2
+                        className={cn(
+                          "w-4 h-4 shrink-0",
+                          circle.active ? "text-blue-600" : "text-gray-200",
+                        )}
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm truncate">{circle.name}</p>
+                        <p className="text-xs text-gray-400">{circle.role}</p>
+                      </div>
+                    </DropdownMenuItem>
+                  ))}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => setNewCircleOpen(true)}
+                    className="gap-2 text-blue-600"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Create New Circle
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-          {/* Profile Button */}
-          <IconButton onClick={handleProfileClick} color="primary">
-            <AccountCircle />
-          </IconButton>
+              {/* Profile dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    <Avatar className="w-8 h-8">
+                      <AvatarFallback className="text-xs bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+                        {initials}
+                      </AvatarFallback>
+                    </Avatar>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <div className="px-2 py-1.5">
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {displayName}
+                    </p>
+                    <p className="text-xs text-gray-400 truncate">
+                      {user?.email}
+                    </p>
+                    <Badge variant="outline" className="mt-1 text-xs">
+                      Free Plan
+                    </Badge>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => setProfileOpen(true)}
+                    className="gap-2"
+                  >
+                    <User className="w-4 h-4" />
+                    Profile & Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={handleSignOut}
+                    className="gap-2 text-red-600 focus:text-red-600 focus:bg-red-50"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+        </div>
+      </header>
 
-          {/* Profile Menu */}
-          <Menu
-            anchorEl={profileAnchor}
-            open={Boolean(profileAnchor)}
-            onClose={handleCloseMenus}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-          >
-            <Box sx={{ px: 2, py: 1 }}>
-              <Typography variant="subtitle1" fontWeight="medium">
-                {userData.name}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {userData.email}
-              </Typography>
-            </Box>
-            <Divider />
-            <MenuItem
-              onClick={() => {
-                setProfileDialogOpen(true);
-                handleCloseMenus();
-              }}
-            >
-              <ListItemIcon>
-                <AccountCircle fontSize="small" />
-              </ListItemIcon>
-              View Profile
-            </MenuItem>
-          </Menu>
-
-          {/* Circle Menu */}
-          <Menu
-            anchorEl={circleAnchor}
-            open={Boolean(circleAnchor)}
-            onClose={handleCloseMenus}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            PaperProps={{ sx: { minWidth: 280 } }}
-          >
-            <Box sx={{ px: 2, py: 1 }}>
-              <Typography variant="subtitle2" color="text.secondary">
-                Your Circles
-              </Typography>
-            </Box>
-            <Divider />
-            {circles.map((circle) => (
-              <MenuItem
-                key={circle.id}
-                onClick={() => handleSwitchCircle(circle.id)}
-                selected={circle.active}
-              >
-                <ListItemIcon>
-                  {circle.active ? (
-                    <CheckCircle fontSize="small" color="primary" />
-                  ) : (
-                    <Circle fontSize="small" />
-                  )}
-                </ListItemIcon>
-                <ListItemText primary={circle.name} secondary={circle.role} />
-              </MenuItem>
-            ))}
-            <Divider />
-            <MenuItem
-              onClick={() => {
-                setNewCircleDialogOpen(true);
-                handleCloseMenus();
-              }}
-            >
-              <ListItemIcon>
-                <Add fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Create New Circle" />
-            </MenuItem>
-          </Menu>
-        </Toolbar>
-      </AppBar>
-
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      {/* ── Page Content ── */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Outlet />
-      </Container>
+      </main>
 
-      {/* Profile Dialog */}
+      {/* ── Profile Dialog ── */}
+      <ProfileDialog open={profileOpen} onClose={() => setProfileOpen(false)} />
+
+      {/* ── Create New Circle Dialog ── */}
       <Dialog
-        open={profileDialogOpen}
-        onClose={() => setProfileDialogOpen(false)}
-        maxWidth="sm"
-        fullWidth
+        open={newCircleOpen}
+        onOpenChange={(o) => !o && setNewCircleOpen(false)}
       >
-        <DialogTitle>Profile Settings</DialogTitle>
-        <DialogContent>
-          <Stack spacing={3} sx={{ mt: 2 }}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              <Avatar
-                sx={{
-                  width: 80,
-                  height: 80,
-                  background:
-                    "linear-gradient(135deg, #3b82f6 0%, #a855f7 100%)",
-                  fontSize: "2rem",
-                }}
-              >
-                {userData.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
-              </Avatar>
-              <Box>
-                <Typography variant="h6">{userData.name}</Typography>
-                <Button size="small" sx={{ textTransform: "none" }}>
-                  Change Photo
-                </Button>
-              </Box>
-            </Box>
-
-            <TextField
-              fullWidth
-              label="Full Name"
-              value={userData.name}
-              onChange={(e) =>
-                setUserData({ ...userData, name: e.target.value })
-              }
-            />
-
-            <TextField
-              fullWidth
-              label="Email"
-              type="email"
-              value={userData.email}
-              onChange={(e) =>
-                setUserData({ ...userData, email: e.target.value })
-              }
-            />
-
-            <Box>
-              <Typography variant="subtitle2" gutterBottom>
-                Subscription
-              </Typography>
-              <Box
-                sx={{
-                  p: 2,
-                  bgcolor: "#eff6ff",
-                  borderRadius: 1,
-                  border: "1px solid #3b82f6",
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  fontWeight="medium"
-                  color="primary.dark"
-                >
-                  {userData.subscription}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  Billed monthly • Next payment: April 27, 2026
-                </Typography>
-              </Box>
-              <Button size="small" sx={{ mt: 1, textTransform: "none" }}>
-                Manage Subscription
-              </Button>
-            </Box>
-
-            <Divider />
-
-            <Box>
-              <Typography variant="subtitle2" gutterBottom>
-                Account Actions
-              </Typography>
-              <Stack spacing={1}>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  fullWidth
-                  sx={{ textTransform: "none", justifyContent: "flex-start" }}
-                >
-                  Change Password
-                </Button>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  fullWidth
-                  sx={{ textTransform: "none", justifyContent: "flex-start" }}
-                >
-                  Privacy Settings
-                </Button>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  fullWidth
-                  sx={{ textTransform: "none", justifyContent: "flex-start" }}
-                >
-                  Notification Preferences
-                </Button>
-              </Stack>
-            </Box>
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setProfileDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleSaveProfile} variant="contained">
-            Save Changes
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Create New Circle Dialog */}
-      <Dialog
-        open={newCircleDialogOpen}
-        onClose={() => setNewCircleDialogOpen(false)}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>Create New Circle</DialogTitle>
-        <DialogContent>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            paragraph
-            sx={{ mt: 1 }}
-          >
-            Start a new circle of care for someone who needs support.
-          </Typography>
-          <Stack spacing={3}>
-            <TextField
-              fullWidth
-              label="Circle Name"
-              placeholder="e.g., Dad's Recovery Circle"
-              value={newCircleName}
-              onChange={(e) => setNewCircleName(e.target.value)}
-              helperText="Give your circle a meaningful name"
-            />
-
-            <TextField
-              fullWidth
-              select
-              label="Your Role"
-              value={newCircleRole}
-              onChange={(e) => setNewCircleRole(e.target.value)}
-              helperText="What is your relationship to the person at the center?"
-              SelectProps={{
-                native: true,
-              }}
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Create New Circle</DialogTitle>
+            <DialogDescription>
+              Start a circle of care for someone who needs support.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-1">
+              <Label htmlFor="circleName">Circle name</Label>
+              <Input
+                id="circleName"
+                placeholder="e.g. Dad's Recovery Circle"
+                value={newCircleName}
+                onChange={(e) => setNewCircleName(e.target.value)}
+              />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="circleRole">Your role</Label>
+              <Select value={newCircleRole} onValueChange={setNewCircleRole}>
+                <SelectTrigger id="circleRole">
+                  <SelectValue placeholder="Select your role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="CENTER">
+                    Center (person being supported)
+                  </SelectItem>
+                  <SelectItem value="CAREGIVER">Caregiver</SelectItem>
+                  <SelectItem value="FAMILY">Family Member</SelectItem>
+                  <SelectItem value="FRIEND">Friend</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setNewCircleOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleCreateCircle}
+              disabled={!newCircleName || !newCircleRole}
+              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white"
             >
-              <option value=""></option>
-              <option value="Caregiver">Caregiver (Primary Support)</option>
-              <option value="Family">Family Member</option>
-              <option value="Friend">Friend</option>
-            </TextField>
-
-            <Box
-              sx={{
-                p: 2,
-                bgcolor: "#dbeafe",
-                borderRadius: 1,
-                border: "1px solid #3b82f6",
-              }}
-            >
-              <Typography variant="body2" color="primary.dark">
-                <strong>Next steps:</strong> After creating your circle, you'll
-                be able to add the person at the center, invite other members,
-                and start sharing updates.
-              </Typography>
-            </Box>
-          </Stack>
+              Create Circle
+            </Button>
+          </DialogFooter>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setNewCircleDialogOpen(false)}>Cancel</Button>
-          <Button
-            onClick={handleCreateCircle}
-            variant="contained"
-            disabled={!newCircleName || !newCircleRole}
-          >
-            Create Circle
-          </Button>
-        </DialogActions>
       </Dialog>
-    </Box>
+    </div>
   );
 }

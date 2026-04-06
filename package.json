@@ -1,5 +1,5 @@
 {
-  "name": "@figma/my-make-file",
+  "name": "circle",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -8,14 +8,6 @@
     "dev": "vite"
   },
   "dependencies": {
-    "@aws-amplify/ui-react": "~6.15.2",
-    "@tailwindcss/vite": "4.2.2",
-    "aws-amplify": "~6.16.3",
-    "@emotion/react": "11.14.0",
-    "@emotion/styled": "11.14.1",
-    "@mui/icons-material": "7.3.5",
-    "@mui/material": "7.3.5",
-    "@popperjs/core": "2.11.8",
     "@radix-ui/react-accordion": "1.2.3",
     "@radix-ui/react-alert-dialog": "1.1.6",
     "@radix-ui/react-aspect-ratio": "1.1.2",
@@ -42,6 +34,7 @@
     "@radix-ui/react-toggle": "1.1.2",
     "@radix-ui/react-toggle-group": "1.1.2",
     "@radix-ui/react-tooltip": "1.1.8",
+    "aws-amplify": "^6.16.3",
     "canvas-confetti": "1.9.4",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
@@ -58,7 +51,6 @@
     "react-dnd-html5-backend": "16.0.1",
     "react-dom": "18.3.1",
     "react-hook-form": "7.55.0",
-    "react-popper": "2.3.0",
     "react-resizable-panels": "2.1.7",
     "react-responsive-masonry": "2.7.1",
     "react-router": "7.13.0",
@@ -72,12 +64,15 @@
   "devDependencies": {
     "@aws-amplify/backend": "~1.22.0",
     "@aws-amplify/backend-cli": "~1.8.1",
-    "@tailwindcss/vite": "4.1.12",
+    "@tailwindcss/vite": "^4.2.2",
     "@types/node": "^25.5.0",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "4.7.0",
+    "aws-cdk-lib": "^2.248.0",
+    "constructs": "^10.6.0",
     "tailwindcss": "4.1.12",
+    "typescript": "5.9.3",
     "vite": "6.3.5"
   },
   "pnpm": {
