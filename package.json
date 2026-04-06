@@ -4,8 +4,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "dev": "vite"
+    "build": "amplify generate outputs --branch main && vite build",
+    "amplify:generate": "amplify generate outputs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "1.2.3",
