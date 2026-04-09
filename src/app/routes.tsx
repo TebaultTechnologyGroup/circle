@@ -10,8 +10,7 @@ import { AddCircle } from "./pages/AddCircle"; // Import your new component
 import { RequireAuth, RedirectIfAuthenticated } from "./guards/AuthGuard";
 import { LoginPage } from "./pages/LoginPage";
 import { CircleListView } from "./pages/CircleListView";
-//import { Edit } from "lucide-react";
-import { EditCircle } from "./pages/EditCircle";
+import { CircleSettings } from "./pages/CircleSettings";
 import { AccountPage } from "./pages/AccountPage";
 
 export const router = createBrowserRouter([
@@ -43,7 +42,7 @@ export const router = createBrowserRouter([
               { path: "updates", Component: Updates },
               { path: "members", Component: Members },
               { path: "help", Component: Help },
-              { path: "settings", Component: EditCircle },
+              { path: "settings", Component: CircleSettings },
             ],
           },
         ],

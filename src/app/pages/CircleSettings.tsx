@@ -22,7 +22,7 @@ import { PhoneInput } from "./ui/phoneInput";
 
 const client = generateClient<Schema>();
 
-export function EditCircle() {
+export function CircleSettings() {
   const navigate = useNavigate();
   const { currentCircle, userRole, isLoading: contextLoading } = useCircle();
   const [isSaving, setIsSaving] = useState(false);
@@ -219,12 +219,6 @@ export function EditCircle() {
 
             <div className="grid grid-cols-1 gap-4 pt-4 border-t">
               <div className="flex items-center space-x-2 py-4">
-                <Label
-                  htmlFor="isDiscoverable"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Is Discoverable
-                </Label>
                 <Checkbox
                   id="isDiscoverable"
                   checked={formData.isDiscoverable}
@@ -235,10 +229,42 @@ export function EditCircle() {
                     })
                   }
                 />
+                <Label
+                  htmlFor="isDiscoverable"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Is Discoverable
+                </Label>
                 <div className="grid gap-1.5 leading-none">
                   <p className="text-sm text-muted-foreground">
                     Allow others to find this circle by searching for the
                     Center's name.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 gap-4 pt-4 border-t">
+              <div className="flex items-center space-x-2 py-4">
+                <Checkbox
+                  id="isDiscoverable"
+                  checked={formData.isDiscoverable}
+                  onCheckedChange={(checked) =>
+                    setFormData({
+                      ...formData,
+                      isDiscoverable: checked === true,
+                    })
+                  }
+                />
+                <Label
+                  htmlFor="requiresMemberApproval"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Require Approval
+                </Label>
+                <div className="grid gap-1.5 leading-none">
+                  <p className="text-sm text-muted-foreground">
+                    Require approval for members to join the circle. If
+                    disabled, anyone can join by searching.
                   </p>
                 </div>
               </div>

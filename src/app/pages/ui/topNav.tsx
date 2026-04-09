@@ -8,6 +8,7 @@ import {
   LogOut,
   User,
   LayoutGrid,
+  CircleArrowLeft,
 } from "lucide-react";
 import { Button } from "./button";
 import { Avatar, AvatarFallback } from "./avatar";
@@ -25,7 +26,8 @@ import { cn } from "./utils";
 
 export function TopNav() {
   const { user, signOut } = useAuth();
-  const { currentCircle } = useCircle();
+  const { currentCircle, userRole } = useCircle();
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -33,29 +35,46 @@ export function TopNav() {
 
   const navigation = [
     {
+      name: "My Circles",
+      path: "/app",
+      icon: CircleArrowLeft,
+      roles: [],
+      requireCircle: true,
+    },
+    {
       name: "Dashboard",
       path: currentCircle ? `/app/circle/${currentCircle.id}` : "/app",
       icon: Heart,
+      roles: [],
+      requireCircle: true,
     },
     {
       name: "Updates",
       path: currentCircle ? `/app/circle/${currentCircle.id}/updates` : "/app",
       icon: FileText,
+      roles: [],
+      requireCircle: true,
     },
     {
       name: "Members",
       path: currentCircle ? `/app/circle/${currentCircle.id}/members` : "/app",
       icon: Users,
+      roles: [],
+      requireCircle: true,
     },
     {
       name: "Help",
       path: currentCircle ? `/app/circle/${currentCircle.id}/help` : "/app",
       icon: Users,
+      roles: [],
+      requireCircle: true,
     },
     {
       name: "Settings",
       path: currentCircle ? `/app/circle/${currentCircle.id}/settings` : "/app",
       icon: Settings,
+      roles: ["CENTER", "CAREGIVER"],
+      requireCircle: true,
     },
   ];
 
@@ -77,6 +96,19 @@ export function TopNav() {
           <div className="hidden md:flex items-center gap-1">
             {navigation.map((item) => {
               const isActive = location.pathname === item.path;
+
+              // role-based access control: if the item has roles defined and the user's role is not included, don't render the button
+              if (
+                item.roles.length > 0 &&
+                !item.roles.includes(userRole || "")
+              ) {
+                return null;
+              }
+
+              if (item.requireCircle && !currentCircle) {
+                return null;
+              }
+
               return (
                 <Link key={item.name} to={item.path}>
                   <Button
