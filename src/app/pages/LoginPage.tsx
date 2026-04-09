@@ -194,7 +194,7 @@ export function LoginPage() {
                   Welcome back
                 </h2>
                 <p className="text-sm text-gray-500 mt-1">
-                  Sign in to your circle
+                  Sign in or create an account
                 </p>
               </div>
               <div className="space-y-3">
@@ -355,6 +355,9 @@ export function LoginPage() {
                 <p className="text-sm text-gray-500 mt-1">
                   We sent a 6-digit code to{" "}
                   <span className="font-medium text-gray-700">{email}</span>
+                </p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Check you junk/spam folder if you don't see it.
                 </p>
               </div>
               <div className="space-y-1">

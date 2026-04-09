@@ -137,6 +137,15 @@ const schema = a.schema({
     .model({
       // Circle identity
       name: a.string().required(), // e.g. "Support Circle for Jane Smith"
+
+      // Contact points for identity matching
+      centerEmail: a.string(),
+      centerPhone: a.string(),
+
+      // The actual link to the User once they "claim" it
+      centerProfileId: a.id(),
+      centerProfile: a.belongsTo("UserProfile", "centerProfileId"),
+
       description: a.string(),
       isDiscoverable: a.boolean().default(false), // appears in search
       requiresMemberApproval: a.boolean().default(true),

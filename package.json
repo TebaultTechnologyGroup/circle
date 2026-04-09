@@ -8,7 +8,7 @@
     "amplify:generate": "amplify generate outputs"
   },
   "engines": {
-    "node": "^20.20.2"
+    "node": "^22.21.1"
   },
   "dependencies": {
     "@aws-cdk/toolkit-lib": "^1.21.1",
@@ -55,6 +55,7 @@
     "react-dnd-html5-backend": "16.0.1",
     "react-dom": "18.3.1",
     "react-hook-form": "7.55.0",
+    "react-number-format": "^5.4.5",
     "react-resizable-panels": "2.1.7",
     "react-responsive-masonry": "2.7.1",
     "react-router": "7.13.0",
