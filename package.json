@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "amplify generate outputs --branch main && vite build",
-    "amplify:generate": "amplify generate outputs"
+    "amplify:generate": "npx ampx generate outputs"
   },
   "engines": {
     "node": "^22.21.1"
