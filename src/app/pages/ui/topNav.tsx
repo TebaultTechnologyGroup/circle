@@ -23,6 +23,7 @@ import {
 import { useAuth } from "../../context/AppContext";
 import { useCircle } from "../../context/CircleContext";
 import { cn } from "./utils";
+import { ProfileDialog } from "./profileDialog";
 
 export function TopNav() {
   const { user, signOut } = useAuth();
@@ -171,6 +172,7 @@ export function TopNav() {
           </DropdownMenu>
         </div>
       </div>
+      <ProfileDialog open={false} onClose={() => {}} />
     </nav>
   );
 }

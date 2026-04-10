@@ -1,25 +1,25 @@
-import { useState, useEffect } from 'react';
-import { generateClient } from 'aws-amplify/data';
-import { updatePassword } from 'aws-amplify/auth';
-import type { Schema } from '../../../amplify/data/resource';
+import { useState, useEffect } from "react";
+import { generateClient } from "aws-amplify/data";
+import { updatePassword } from "aws-amplify/auth";
+import type { Schema } from "../../../amplify/data/resource";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from './ui/dialog';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Separator } from './ui/separator';
-import { Avatar, AvatarFallback } from './ui/avatar';
-import { Badge } from './ui/badge';
-import { Loader2, Bell, Lock, User } from 'lucide-react';
-import { Switch } from './ui/switch';
-import { toast } from 'sonner';
-import { getErrorMessage } from '../utils/Errors';
-import { useAuth } from '../context/AppContext';
+} from "./ui/dialog";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Separator } from "./ui/separator";
+import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Badge } from "./ui/badge";
+import { Loader2, Bell, Lock, User } from "lucide-react";
+import { Switch } from "./ui/switch";
+import { toast } from "sonner";
+import { getErrorMessage } from "../utils/Errors";
+import { useAuth } from "../context/AppContext";
 
 const client = generateClient<Schema>();
 
@@ -32,9 +32,9 @@ export function ProfileDialog({ open, onClose }: ProfileDialogProps) {
   const { user, profile, refreshProfile } = useAuth();
 
   // Profile fields
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
   const [saving, setSaving] = useState(false);
 
   // Notification preferences
@@ -46,16 +46,16 @@ export function ProfileDialog({ open, onClose }: ProfileDialogProps) {
   const [notifSaving, setNotifSaving] = useState(false);
 
   // Change password
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [pwSaving, setPwSaving] = useState(false);
 
   // Seed form when profile loads
   useEffect(() => {
     if (profile) {
-      setFirstName(profile.firstName ?? '');
-      setLastName(profile.lastName ?? '');
-      setPhone(profile.phone ?? '');
+      setFirstName(profile.firstName ?? "");
+      setLastName(profile.lastName ?? "");
+      setPhone(profile.phone ?? "");
     }
   }, [profile]);
 
@@ -87,7 +87,7 @@ export function ProfileDialog({ open, onClose }: ProfileDialogProps) {
   const initials =
     firstName && lastName
       ? `${firstName[0]}${lastName[0]}`
-      : user?.email?.[0]?.toUpperCase() ?? '?';
+      : (user?.email?.[0]?.toUpperCase() ?? "?");
 
   // ── Save Profile ───────────────────────────────────────────────────────────
 
@@ -102,9 +102,9 @@ export function ProfileDialog({ open, onClose }: ProfileDialogProps) {
         phone: phone || undefined,
       });
       await refreshProfile();
-      toast.success('Profile saved.');
+      toast.success("Profile saved.");
     } catch (err) {
-      toast.error(getErrorMessage(err, 'Could not save profile.'));
+      toast.error(getErrorMessage(err, "Could not save profile."));
     } finally {
       setSaving(false);
     }
@@ -130,13 +130,16 @@ export function ProfileDialog({ open, onClose }: ProfileDialogProps) {
         emailWeeklyDigest: emailWeekly,
       };
       if (pref) {
-        await client.models.NotificationPreference.update({ id: pref.id, ...payload });
+        await client.models.NotificationPreference.update({
+          id: pref.id,
+          ...payload,
+        });
       } else {
         await client.models.NotificationPreference.create(payload);
       }
-      toast.success('Notification preferences saved.');
+      toast.success("Notification preferences saved.");
     } catch (err) {
-      toast.error(getErrorMessage(err, 'Could not save preferences.'));
+      toast.error(getErrorMessage(err, "Could not save preferences."));
     } finally {
       setNotifSaving(false);
     }
@@ -146,21 +149,21 @@ export function ProfileDialog({ open, onClose }: ProfileDialogProps) {
 
   async function handleChangePassword() {
     if (!currentPassword || !newPassword) {
-      toast.error('Please fill in both password fields.');
+      toast.error("Please fill in both password fields.");
       return;
     }
     if (newPassword.length < 8) {
-      toast.error('New password must be at least 8 characters.');
+      toast.error("New password must be at least 8 characters.");
       return;
     }
     setPwSaving(true);
     try {
       await updatePassword({ oldPassword: currentPassword, newPassword });
-      toast.success('Password changed successfully.');
-      setCurrentPassword('');
-      setNewPassword('');
+      toast.success("Password changed successfully.");
+      setCurrentPassword("");
+      setNewPassword("");
     } catch (err) {
-      toast.error(getErrorMessage(err, 'Could not change password.'));
+      toast.error(getErrorMessage(err, "Could not change password."));
     } finally {
       setPwSaving(false);
     }
@@ -176,7 +179,6 @@ export function ProfileDialog({ open, onClose }: ProfileDialogProps) {
         </DialogHeader>
 
         <div className="space-y-6 py-2">
-
           {/* Avatar + name */}
           <div className="flex items-center gap-4">
             <Avatar className="w-16 h-16">
@@ -186,10 +188,14 @@ export function ProfileDialog({ open, onClose }: ProfileDialogProps) {
             </Avatar>
             <div>
               <p className="font-semibold text-gray-900">
-                {firstName || lastName ? `${firstName} ${lastName}`.trim() : 'Your Name'}
+                {firstName || lastName
+                  ? `${firstName} ${lastName}`.trim()
+                  : "Your Name"}
               </p>
               <p className="text-sm text-gray-500">{user?.email}</p>
-              <Badge variant="outline" className="mt-1 text-xs">Free Plan</Badge>
+              <Badge variant="outline" className="mt-1 text-xs">
+                Free Plan
+              </Badge>
             </div>
           </div>
 
@@ -225,11 +231,13 @@ export function ProfileDialog({ open, onClose }: ProfileDialogProps) {
               <Label htmlFor="pEmail">Email</Label>
               <Input
                 id="pEmail"
-                value={user?.email ?? ''}
+                value={user?.email ?? ""}
                 disabled
                 className="bg-gray-50 text-gray-500"
               />
-              <p className="text-xs text-gray-400">Email cannot be changed here.</p>
+              <p className="text-xs text-gray-400">
+                Email cannot be changed here.
+              </p>
             </div>
             <div className="space-y-1">
               <Label htmlFor="pPhone">Phone (for SMS notifications)</Label>
@@ -242,7 +250,9 @@ export function ProfileDialog({ open, onClose }: ProfileDialogProps) {
               />
             </div>
             <Button onClick={handleSaveProfile} disabled={saving} size="sm">
-              {saving ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : null}
+              {saving ? (
+                <Loader2 className="w-3 h-3 animate-spin mr-2" />
+              ) : null}
               Save Profile
             </Button>
           </div>
@@ -257,11 +267,31 @@ export function ProfileDialog({ open, onClose }: ProfileDialogProps) {
             </div>
             <div className="space-y-3">
               {[
-                { label: 'SMS: New updates', value: smsOnUpdate, onChange: setSmsOnUpdate },
-                { label: 'SMS: New help requests', value: smsOnHelp, onChange: setSmsOnHelp },
-                { label: 'Email: New updates', value: emailOnUpdate, onChange: setEmailOnUpdate },
-                { label: 'Email: New help requests', value: emailOnHelp, onChange: setEmailOnHelp },
-                { label: 'Email: Weekly digest', value: emailWeekly, onChange: setEmailWeekly },
+                {
+                  label: "SMS: New updates",
+                  value: smsOnUpdate,
+                  onChange: setSmsOnUpdate,
+                },
+                {
+                  label: "SMS: New help requests",
+                  value: smsOnHelp,
+                  onChange: setSmsOnHelp,
+                },
+                {
+                  label: "Email: New updates",
+                  value: emailOnUpdate,
+                  onChange: setEmailOnUpdate,
+                },
+                {
+                  label: "Email: New help requests",
+                  value: emailOnHelp,
+                  onChange: setEmailOnHelp,
+                },
+                {
+                  label: "Email: Weekly digest",
+                  value: emailWeekly,
+                  onChange: setEmailWeekly,
+                },
               ].map(({ label, value, onChange }) => (
                 <div key={label} className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">{label}</span>
@@ -269,8 +299,15 @@ export function ProfileDialog({ open, onClose }: ProfileDialogProps) {
                 </div>
               ))}
             </div>
-            <Button onClick={handleSaveNotifications} disabled={notifSaving} size="sm" variant="outline">
-              {notifSaving ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : null}
+            <Button
+              onClick={handleSaveNotifications}
+              disabled={notifSaving}
+              size="sm"
+              variant="outline"
+            >
+              {notifSaving ? (
+                <Loader2 className="w-3 h-3 animate-spin mr-2" />
+              ) : null}
               Save Preferences
             </Button>
           </div>
@@ -305,16 +342,24 @@ export function ProfileDialog({ open, onClose }: ProfileDialogProps) {
                 />
               </div>
             </div>
-            <Button onClick={handleChangePassword} disabled={pwSaving} size="sm" variant="outline">
-              {pwSaving ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : null}
+            <Button
+              onClick={handleChangePassword}
+              disabled={pwSaving}
+              size="sm"
+              variant="outline"
+            >
+              {pwSaving ? (
+                <Loader2 className="w-3 h-3 animate-spin mr-2" />
+              ) : null}
               Change Password
             </Button>
           </div>
-
         </div>
 
         <DialogFooter>
-          <Button variant="ghost" onClick={onClose}>Close</Button>
+          <Button variant="ghost" onClick={onClose}>
+            Close
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
