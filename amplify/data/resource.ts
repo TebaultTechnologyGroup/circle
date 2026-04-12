@@ -104,7 +104,7 @@ const schema = a.schema({
       platformDonations: a.hasMany("PlatformDonation", "userProfileId"),
       checkIns: a.hasMany("CheckIn", "userProfileId"),
     })
-    .authorization((allow) => [
+    .authorization((allow: any) => [
       allow.owner(), // user can read/write their own profile
       allow.authenticated().to(["read"]), // other users can read basic profile info
     ]),

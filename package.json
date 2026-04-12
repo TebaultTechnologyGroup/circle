@@ -4,8 +4,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "build": "amplify generate outputs --branch main && vite build",
-    "amplify:generate": "npx ampx generate outputs"
+    "build": "npm run amplify:generate && vite build",
+    "amplify:generate": "npx ampx generate outputs --branch ${AWS_BRANCH:-main} --app-id ${AWS_APP_ID:-}"
   },
   "engines": {
     "node": ">=20.0.0 <21.0.0"
