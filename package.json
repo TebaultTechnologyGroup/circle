@@ -83,9 +83,8 @@
     "typescript": "5.9.3",
     "vite": "6.3.5"
   },
-  "pnpm": {
-    "overrides": {
-      "vite": "6.3.5"
-    }
+  "overrides": {
+    "fast-xml-parser": "^4.4.1",
+    "vite": "6.3.5"
   }
 }
