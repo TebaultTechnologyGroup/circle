@@ -125,7 +125,7 @@ const schema = a.schema({
       emailOnHelpRequest: a.boolean().default(true),
       emailWeeklyDigest: a.boolean().default(true),
     })
-    .authorization((allow) => [allow.owner()]),
+    .authorization((allow: any) => [allow.owner()]),
 
   // ─────────────────────────────────────────────
   // CIRCLE
@@ -182,7 +182,7 @@ const schema = a.schema({
       billingRecords: a.hasMany("BillingRecord", "circleId"),
       checkIns: a.hasMany("CheckIn", "circleId"),
     })
-    .authorization((allow) => [
+    .authorization((allow: any) => [
       // Any authenticated user can read discoverable circles (for search)
       allow.authenticated().to(["read"]),
       // Full access controlled via custom Lambda authorizer or field-level rules
@@ -209,7 +209,7 @@ const schema = a.schema({
       displayName: a.string(), // "Jane S."
       avatarS3Key: a.string(),
     })
-    .authorization((allow) => [
+    .authorization((allow: any) => [
       allow.authenticated().to(["read"]),
       allow.owner(),
     ]),
@@ -236,7 +236,7 @@ const schema = a.schema({
       resolvedByCognitoId: a.string(), // who approved/denied
       denialReason: a.string(),
     })
-    .authorization((allow) => [allow.owner(), allow.authenticated()]),
+    .authorization((allow: any) => [allow.owner(), allow.authenticated()]),
 
   // ─────────────────────────────────────────────
   // UPDATE (journal post from Center or Caregiver)
@@ -258,7 +258,7 @@ const schema = a.schema({
       reactions: a.hasMany("Reaction", "updateId"),
       comments: a.hasMany("Comment", "updateId"),
     })
-    .authorization((allow) => [
+    .authorization((allow: any) => [
       allow.authenticated().to(["read"]),
       allow.owner(),
     ]),
@@ -277,7 +277,7 @@ const schema = a.schema({
       userDisplayName: a.string(), // denormalized
       reactionType: a.ref("ReactionType").required(),
     })
-    .authorization((allow) => [
+    .authorization((allow: any) => [
       allow.authenticated().to(["read"]),
       allow.owner(),
     ]),
@@ -295,7 +295,7 @@ const schema = a.schema({
       authorDisplayName: a.string(), // denormalized
       content: a.string().required(),
     })
-    .authorization((allow) => [
+    .authorization((allow: any) => [
       allow.authenticated().to(["read"]),
       allow.owner(),
     ]),
@@ -323,7 +323,7 @@ const schema = a.schema({
       volunteerDisplayName: a.string(), // denormalized
       claimedAt: a.datetime(),
     })
-    .authorization((allow) => [
+    .authorization((allow: any) => [
       allow.authenticated().to(["read"]),
       allow.owner(),
     ]),
@@ -350,7 +350,7 @@ const schema = a.schema({
 
       contributions: a.hasMany("Contribution", "fundingId"),
     })
-    .authorization((allow) => [
+    .authorization((allow: any) => [
       allow.authenticated().to(["read"]),
       allow.owner(),
     ]),
@@ -376,7 +376,7 @@ const schema = a.schema({
       stripePaymentIntentId: a.string().required(), // for reconciliation
       stripeStatus: a.string().required(), // 'succeeded', 'refunded', etc.
     })
-    .authorization((allow) => [
+    .authorization((allow: any) => [
       allow.authenticated().to(["read"]),
       allow.owner(),
     ]),
@@ -397,7 +397,7 @@ const schema = a.schema({
       stripePaymentIntentId: a.string().required(),
       stripeStatus: a.string().required(),
     })
-    .authorization((allow) => [allow.owner()]),
+    .authorization((allow: any) => [allow.owner()]),
 
   // ─────────────────────────────────────────────
   // SUBSCRIPTION PLAN (lookup/reference table — seed manually)
@@ -421,7 +421,7 @@ const schema = a.schema({
       stripePriceId: a.string(),
       isActive: a.boolean().default(true),
     })
-    .authorization((allow) => [
+    .authorization((allow: any) => [
       allow.authenticated().to(["read"]),
       allow.owner(),
     ]),
@@ -450,7 +450,7 @@ const schema = a.schema({
       // Which features were active during this billing period
       featuresSnapshot: a.json(), // { voiceToUpdate: true, medicalSummary: false, ... }
     })
-    .authorization((allow) => [allow.owner()]),
+    .authorization((allow: any) => [allow.owner()]),
 
   // ─────────────────────────────────────────────
   // CHECK-IN (daily symptom log — AI Doctor Summary feature)
@@ -478,7 +478,7 @@ const schema = a.schema({
       // If you want to cache the AI summary, add: aiSummary: a.string()
       checkInDate: a.date().required(), // YYYY-MM-DD
     })
-    .authorization((allow) => [
+    .authorization((allow: any) => [
       // Only the owner (who logged it) can read/write
       // Additional access for Caregiver/Center enforced at Lambda layer
       allow.owner(),
