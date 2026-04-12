@@ -85,7 +85,7 @@ export function TopNav() {
         {/* Left Side: Logo & Nav Buttons */}
         <div className="flex items-center gap-8">
           <Link to="/app" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-linear-to-br from-blue-500 to-purple-600 flex items-center justify-center">
               <Heart className="w-5 h-5 text-white fill-current" />
             </div>
             <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">

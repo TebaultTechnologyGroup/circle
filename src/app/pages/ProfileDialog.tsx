@@ -182,7 +182,7 @@ export function ProfileDialog({ open, onClose }: ProfileDialogProps) {
           {/* Avatar + name */}
           <div className="flex items-center gap-4">
             <Avatar className="w-16 h-16">
-              <AvatarFallback className="text-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+              <AvatarFallback className="text-xl bg-linear-to-br from-blue-500 to-purple-600 text-white">
                 {initials}
               </AvatarFallback>
             </Avatar>
